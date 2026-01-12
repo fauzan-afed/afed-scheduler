@@ -32,8 +32,9 @@ const getTomorrow = () => {
 };
 
 export default function SchedulerPage({ roomId }: SchedulerPageProps) {
-    const today = getToday();
-    const tomorrow = getTomorrow();
+    // Memoize today and tomorrow to prevent unnecessary re-renders
+    const today = React.useMemo(() => getToday(), []);
+    const tomorrow = React.useMemo(() => getTomorrow(), []);
 
     // Use PocketBase hooks
     const { user: currentUser, loading: authLoading } = useAuth();
