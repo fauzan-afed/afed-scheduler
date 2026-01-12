@@ -114,6 +114,53 @@ body {
   height: 40px;
 }
 
+/* Auth Button Styles */
+.auth-button-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.user-avatar-small {
+  border-radius: 50%;
+}
+
+.user-name {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--gray-700);
+}
+
+.auth-logout-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: background-color 0.2s;
+  color: var(--gray-600);
+}
+
+.auth-logout-btn:hover {
+  background-color: var(--red-50);
+  color: var(--red-600);
+}
+
+.auth-logout-btn svg {
+  width: 20px;
+  height: 20px;
+}
+
 /* Room Card Styles */
 .room-card {
   padding: 0 20px;
@@ -969,4 +1016,417 @@ body {
   opacity: 0.95;
   transform: scale(1.01);
   transition: all 0.15s ease;
+}
+
+/* ========================================
+   QR Generator Styles
+   ======================================== */
+
+.qr-generator-page {
+  min-height: 100vh;
+  background-color: var(--gray-100);
+}
+
+.qr-generator-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 32px 20px;
+}
+
+.qr-generator-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 32px;
+}
+
+.qr-generator-title {
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--gray-900);
+  margin-bottom: 8px;
+}
+
+.qr-generator-subtitle {
+  font-size: 16px;
+  color: var(--gray-600);
+}
+
+/* QR Controls */
+.qr-controls {
+  background-color: var(--white);
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 32px;
+  box-shadow: var(--shadow);
+}
+
+.qr-controls-row {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.qr-control-group {
+  flex: 1;
+  min-width: 200px;
+}
+
+.qr-control-label {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--gray-700);
+  margin-bottom: 8px;
+}
+
+.qr-control-select {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid var(--gray-200);
+  border-radius: 10px;
+  font-size: 15px;
+  font-family: inherit;
+  color: var(--gray-900);
+  background-color: var(--gray-50);
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236B7280'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 20px;
+  padding-right: 40px;
+}
+
+.qr-controls-actions {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.qr-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 14px 24px;
+  border: none;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.qr-btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+.qr-btn-primary {
+  background-color: var(--primary-blue);
+  color: var(--white);
+  flex: 1;
+}
+
+.qr-btn-primary:hover {
+  background-color: var(--primary-blue-dark);
+}
+
+.qr-btn-secondary {
+  background-color: var(--gray-100);
+  color: var(--gray-700);
+}
+
+.qr-btn-secondary:hover {
+  background-color: var(--gray-200);
+}
+
+.qr-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.qr-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  background-color: #EFF6FF;
+  border-radius: 10px;
+  font-size: 14px;
+  color: #1E40AF;
+}
+
+.qr-info svg {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+/* Print Preview Section */
+.print-preview-section {
+  background-color: var(--white);
+  border-radius: 16px;
+  padding: 32px;
+  box-shadow: var(--shadow);
+}
+
+.preview-section-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--gray-900);
+  margin-bottom: 24px;
+}
+
+.qr-labels-grid {
+  display: grid;
+  gap: 16px;
+  width: 100%;
+}
+
+.qr-labels-grid.grid-cols-2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.qr-labels-grid.grid-cols-3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.qr-labels-grid.grid-rows-2 {
+  grid-template-rows: repeat(2, 1fr);
+}
+
+.qr-labels-grid.grid-rows-3 {
+  grid-template-rows: repeat(3, 1fr);
+}
+
+/* QR Label */
+.qr-label {
+  border: 3px solid #481267;
+  border-radius: 16px;
+  padding: 24px 20px;
+  text-align: center;
+  background-color: var(--white);
+  page-break-inside: avoid;
+  box-sizing: border-box;
+}
+
+.qr-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.qr-logo {
+  width: 40px;
+  height: 40px;
+}
+
+.qr-brand {
+  font-size: 11px;
+  font-weight: 700;
+  color: #481267;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.qr-code {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 16px auto;
+  min-height: 120px;
+  min-width: 120px;
+}
+
+.qr-code img {
+  width: 120px;
+  height: 120px;
+  image-rendering: crisp-edges;
+}
+
+.qr-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  color: var(--gray-400);
+}
+
+.qr-label .room-name {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--gray-900);
+  margin: 0 0 4px 0;
+}
+
+.room-floor {
+  font-size: 14px;
+  color: var(--gray-600);
+  margin: 0 0 16px 0;
+}
+
+.qr-divider {
+  border: none;
+  border-top: 1px solid var(--gray-200);
+  margin: 16px 0;
+}
+
+.qr-instructions {
+  font-size: 13px;
+  color: var(--gray-600);
+  margin: 0 0 8px 0;
+  line-height: 1.5;
+}
+
+.qr-url {
+  font-size: 11px;
+  color: var(--gray-500);
+  margin: 0;
+  word-break: break-all;
+  font-family: 'Courier New', monospace;
+}
+
+/* Loading container */
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  gap: 16px;
+}
+
+/* ========================================
+   Print Styles
+   ======================================== */
+
+@media print {
+  /* Hide UI elements when printing */
+  .no-print {
+    display: none !important;
+  }
+
+  /* Page setup */
+  @page {
+    size: A4;
+    margin: 10mm;
+  }
+
+  body {
+    background: white !important;
+  }
+
+  /* Hide app elements during print */
+  .page,
+  .header,
+  .room-card,
+  .calendar-wrapper,
+  .book-button-container,
+  .modal-overlay {
+    display: none !important;
+  }
+
+  /* Show only QR generator for print */
+  .qr-generator-page {
+    display: block !important;
+  }
+
+  .qr-generator-container {
+    max-width: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .qr-generator-header,
+  .qr-controls {
+    display: none !important;
+  }
+
+  .print-preview-section {
+    background: white !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    padding: 0 !important;
+  }
+
+  .preview-section-title {
+    display: none !important;
+  }
+
+  /* Print layout grid */
+  .qr-labels-grid {
+    display: grid !important;
+    gap: 10mm !important;
+    width: 100% !important;
+  }
+
+  .qr-labels-grid[data-layout="2x2"] {
+    grid-template-columns: repeat(2, 1fr) !important;
+    grid-template-rows: repeat(2, 1fr) !important;
+  }
+
+  .qr-labels-grid[data-layout="2x3"] {
+    grid-template-columns: repeat(2, 1fr) !important;
+    grid-template-rows: repeat(3, 1fr) !important;
+  }
+
+  .qr-labels-grid[data-layout="3x3"] {
+    grid-template-columns: repeat(3, 1fr) !important;
+    grid-template-rows: repeat(3, 1fr) !important;
+  }
+
+  /* Individual label */
+  .qr-label {
+    border: 3px solid #481267 !important;
+    padding: 8mm !important;
+    text-align: center !important;
+    page-break-inside: avoid !important;
+    box-sizing: border-box !important;
+    box-shadow: none !important;
+  }
+
+  /* Ensure QR code is visible and properly sized */
+  .qr-code {
+    margin: 4mm auto !important;
+  }
+
+  .qr-code img {
+    width: 40mm !important;
+    height: 40mm !important;
+    max-width: 40mm !important;
+    max-height: 40mm !important;
+  }
+
+  /* Force background colors */
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color-adjust: exact !important;
+  }
+
+  /* Hide shadows */
+  * {
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+
+  /* Ensure text is readable */
+  .qr-brand,
+  .room-name,
+  .room-floor,
+  .qr-instructions,
+  .qr-url {
+    color: #000 !important;
+  }
+
+  .qr-brand {
+    color: #481267 !important;
+  }
 }

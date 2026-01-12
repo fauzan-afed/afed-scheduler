@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import AuthButton from './AuthButton';
 
 interface HeaderProps {
     date: Date;
@@ -43,6 +44,8 @@ export default function Header({ date, canGoPrev, canGoNext, onPrev, onNext }: H
             )}
 
             <span className="header-date">{formatDate(date)}</span>
+
+            <AuthButton />
 
             {canGoNext ? (
                 <button className="header-btn" onClick={onNext} aria-label="Next day">

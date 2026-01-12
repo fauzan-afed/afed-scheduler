@@ -18,11 +18,11 @@ interface RoomCardProps {
     modelPath?: string;
 }
 
-export default function RoomCard({ name, modelPath }: RoomCardProps) {
+export default React.memo(function RoomCard({ name, modelPath }: RoomCardProps) {
     return (
         <div className="room-card">
             {modelPath && <Model3DViewer modelPath={modelPath} />}
             <h1 className="room-name">{name}</h1>
         </div>
     );
-}
+});

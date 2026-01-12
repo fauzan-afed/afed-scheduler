@@ -29,7 +29,7 @@ const outlineFragmentShader = `
   }
 `;
 
-export default function Model3DViewer({ modelPath }: Model3DViewerProps) {
+export default React.memo(function Model3DViewer({ modelPath }: Model3DViewerProps) {
     const containerRef = useRef<HTMLDivElement>(null);
     const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
     const composerRef = useRef<EffectComposer | null>(null);
@@ -100,6 +100,8 @@ export default function Model3DViewer({ modelPath }: Model3DViewerProps) {
         controls.autoRotateSpeed = 2;
         controls.enableZoom = false;
         controls.enablePan = false;
+        // IMPORTANT: Prevent controls from triggering any event listeners that might cause React re-renders
+        controls.enabled = true;
         controlsRef.current = controls;
 
         // Lighting
@@ -232,4 +234,4 @@ export default function Model3DViewer({ modelPath }: Model3DViewerProps) {
     }, [modelPath]);
 
     return <div ref={containerRef} className="model-3d-container" />;
-}
+});

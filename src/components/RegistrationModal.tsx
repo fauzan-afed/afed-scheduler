@@ -9,12 +9,14 @@ interface User {
     department: string;
     gender: 'male' | 'female';
     avatarConfig: AvatarFullConfig;
+    deviceId?: string;
 }
 
 interface RegistrationModalProps {
     isOpen: boolean;
     onClose: () => void;
-    onRegister: (user: User) => void;
+    onRegister: (user: User & { deviceId: string }) => void;
+    isLoading?: boolean;
 }
 
 const DEPARTMENTS = [
@@ -24,7 +26,7 @@ const DEPARTMENTS = [
     'Others'
 ];
 
-export default function RegistrationModal({ isOpen, onClose, onRegister }: RegistrationModalProps) {
+export default function RegistrationModal({ isOpen, onClose, onRegister, isLoading = false }: RegistrationModalProps) {
     const [name, setName] = useState('');
     const [department, setDepartment] = useState(DEPARTMENTS[0]);
     const [gender, setGender] = useState<'male' | 'female'>('male');
@@ -48,7 +50,8 @@ export default function RegistrationModal({ isOpen, onClose, onRegister }: Regis
             name: name.trim(),
             department,
             gender,
-            avatarConfig: config
+            avatarConfig: config,
+            deviceId: `device-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
         });
     };
 
@@ -132,9 +135,9 @@ export default function RegistrationModal({ isOpen, onClose, onRegister }: Regis
                     <button
                         type="submit"
                         className="modal-submit"
-                        disabled={!name.trim()}
+                        disabled={!name.trim() || isLoading}
                     >
-                        Complete Registration
+                        {isLoading ? 'Registering...' : 'Complete Registration'}
                     </button>
                 </form>
             </div>
