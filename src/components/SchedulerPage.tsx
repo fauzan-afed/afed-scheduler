@@ -59,6 +59,7 @@ export default function SchedulerPage({ roomId }: SchedulerPageProps) {
     const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
     const [isRegistrationModalOpen, setIsRegistrationModalOpen] = useState(false);
     const [isRegistering, setIsRegistering] = useState(false);
+    const [isDeletingMeeting, setIsDeletingMeeting] = useState(false);
     const [selectedTime, setSelectedTime] = useState<Date | null>(null);
     const [selectedMeeting, setSelectedMeeting] = useState<Meeting | null>(null);
     const [pendingMeeting, setPendingMeeting] = useState<{ title: string; start: Date; end: Date } | null>(null);
@@ -144,6 +145,7 @@ export default function SchedulerPage({ roomId }: SchedulerPageProps) {
     };
 
     const handleDeleteMeeting = async (meetingId: string) => {
+        setIsDeletingMeeting(true);
         const result = await deleteMeeting(meetingId);
         if (result.success) {
             setIsDetailModalOpen(false);
@@ -152,6 +154,7 @@ export default function SchedulerPage({ roomId }: SchedulerPageProps) {
             console.error('Failed to delete meeting:', result.error);
             alert('Failed to delete meeting: ' + result.error);
         }
+        setIsDeletingMeeting(false);
     };
 
     const handleRegister = async (userData: CurrentUser & { deviceId: string }) => {
@@ -212,10 +215,12 @@ export default function SchedulerPage({ roomId }: SchedulerPageProps) {
 
     return (
         <main className="page">
-            {(meetingsLoading || isRegistering) && (
+            {(meetingsLoading || isRegistering || isDeletingMeeting) && (
                 <div className="loading-overlay">
                     <div className="loading-spinner" />
-                    <p className="loading-text">{isRegistering ? 'Registering...' : 'Loading...'}</p>
+                    <p className="loading-text">
+                        {isRegistering ? 'Registering...' : isDeletingMeeting ? 'Deleting...' : 'Loading...'}
+                    </p>
                 </div>
             )}
 
