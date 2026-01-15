@@ -23,7 +23,7 @@ interface QRGeneratorPageProps {
     baseUrl?: string;
 }
 
-export default function QRGeneratorPage({ baseUrl = 'http://167.172.87.156:3000' }: QRGeneratorPageProps) {
+export default function QRGeneratorPage({ baseUrl = 'http://167.172.87.156:3001' }: QRGeneratorPageProps) {
     const [rooms, setRooms] = useState<Room[]>([]);
     const [qrCodes, setQrCodes] = useState<Map<string, string>>(new Map());
     const [paperSize, setPaperSize] = useState<PaperSize>('a4');

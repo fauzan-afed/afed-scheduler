@@ -17,7 +17,7 @@ interface QRLabelProps {
     baseUrl?: string;
 }
 
-export default function QRLabel({ room, qrCode, baseUrl = 'http://167.172.87.156:3000' }: QRLabelProps) {
+export default function QRLabel({ room, qrCode, baseUrl = 'http://167.172.87.156:3001' }: QRLabelProps) {
     const roomUrl = `${baseUrl}/?room=${room.id}`;
 
     return (

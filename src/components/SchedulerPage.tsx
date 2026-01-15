@@ -36,13 +36,16 @@ export default function SchedulerPage({ roomId }: SchedulerPageProps) {
     const today = React.useMemo(() => getToday(), []);
     const tomorrow = React.useMemo(() => getTomorrow(), []);
 
+    // State for current date (must be declared before useMeetings)
+    const [currentDate, setCurrentDate] = useState<Date>(today);
+
     // Use PocketBase hooks
     const { user: currentUser, loading: authLoading } = useAuth();
     const { register, getDeviceUser } = useUser();
     const { rooms, loading: roomsLoading } = useRooms();
     const { meetings, loading: meetingsLoading, createMeeting, deleteMeeting, reload: reloadMeetings } = useMeetings(
         roomId || '',
-        today
+        currentDate
     );
 
     // Get room info based on roomId - memoize to prevent unnecessary re-renders
@@ -54,8 +57,6 @@ export default function SchedulerPage({ roomId }: SchedulerPageProps) {
 
     // Find first room if no roomId specified
     const firstRoomId = Object.keys(rooms)[0] || '';
-
-    const [currentDate, setCurrentDate] = useState<Date>(today);
     const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
     const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
     const [isRegistrationModalOpen, setIsRegistrationModalOpen] = useState(false);
