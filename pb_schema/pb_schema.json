@@ -1202,5 +1202,193 @@
       "CREATE UNIQUE INDEX `idx_rooms_name` ON `rooms` (`name`)"
     ],
     "system": false
+  },
+  {
+    "id": "pbc_feedback_collection",
+    "listRule": "@request.auth.id != \"\" && @request.auth.role = \"admin\"",
+    "viewRule": "@request.auth.id != \"\" && (@request.auth.role = \"admin\" || id = @request.auth.id)",
+    "createRule": "id != \"\" || @request.auth.id != \"\"",
+    "updateRule": "@request.auth.id != \"\" && @request.auth.role = \"admin\"",
+    "deleteRule": "@request.auth.id != \"\" && @request.auth.role = \"admin\"",
+    "name": "feedback",
+    "type": "base",
+    "fields": [
+      {
+        "autogeneratePattern": "[a-z0-9]{15}",
+        "hidden": false,
+        "id": "text3208210256",
+        "max": 15,
+        "min": 15,
+        "name": "id",
+        "pattern": "^[a-z0-9]+$",
+        "presentable": false,
+        "primaryKey": true,
+        "required": true,
+        "system": true,
+        "type": "text"
+      },
+      {
+        "cascadeDelete": false,
+        "collectionId": "_pb_users_auth_",
+        "hidden": false,
+        "id": "relation485729387",
+        "maxSelect": 1,
+        "minSelect": 0,
+        "name": "user",
+        "presentable": false,
+        "required": false,
+        "system": false,
+        "type": "relation"
+      },
+      {
+        "hidden": false,
+        "id": "select485729386",
+        "maxSelect": 1,
+        "name": "type",
+        "presentable": false,
+        "required": true,
+        "system": false,
+        "type": "select",
+        "values": [
+          "issue",
+          "idea",
+          "question",
+          "other"
+        ]
+      },
+      {
+        "hidden": false,
+        "id": "select485729387",
+        "maxSelect": 1,
+        "name": "category",
+        "presentable": false,
+        "required": true,
+        "system": false,
+        "type": "select",
+        "values": [
+          "bug",
+          "feature",
+          "ui",
+          "performance",
+          "other"
+        ]
+      },
+      {
+        "autogeneratePattern": "",
+        "hidden": false,
+        "id": "text293847596",
+        "max": 255,
+        "min": 1,
+        "name": "title",
+        "pattern": "",
+        "presentable": true,
+        "primaryKey": false,
+        "required": true,
+        "system": false,
+        "type": "text"
+      },
+      {
+        "autogeneratePattern": "",
+        "hidden": false,
+        "id": "text583920185",
+        "max": 5000,
+        "min": 1,
+        "name": "description",
+        "pattern": "",
+        "presentable": false,
+        "primaryKey": false,
+        "required": true,
+        "system": false,
+        "type": "text"
+      },
+      {
+        "hidden": false,
+        "id": "select485729388",
+        "maxSelect": 1,
+        "name": "priority",
+        "presentable": false,
+        "required": true,
+        "system": false,
+        "type": "select",
+        "values": [
+          "low",
+          "medium",
+          "high",
+          "urgent"
+        ]
+      },
+      {
+        "hidden": false,
+        "id": "select485729389",
+        "maxSelect": 1,
+        "name": "status",
+        "presentable": true,
+        "required": true,
+        "system": false,
+        "type": "select",
+        "values": [
+          "open",
+          "in_progress",
+          "resolved",
+          "closed"
+        ]
+      },
+      {
+        "hidden": false,
+        "id": "file376926768",
+        "maxSelect": 1,
+        "maxSize": 5242880,
+        "mimeTypes": [
+          "image/jpeg",
+          "image/png",
+          "image/gif",
+          "image/webp"
+        ],
+        "name": "screenshot",
+        "presentable": false,
+        "protected": false,
+        "required": false,
+        "system": false,
+        "thumbs": [],
+        "type": "file"
+      },
+      {
+        "exceptDomains": null,
+        "hidden": false,
+        "id": "email3885137013",
+        "name": "email",
+        "onlyDomains": null,
+        "presentable": false,
+        "required": false,
+        "system": false,
+        "type": "email"
+      },
+      {
+        "hidden": false,
+        "id": "autodate2990389176",
+        "name": "created",
+        "onCreate": true,
+        "onUpdate": false,
+        "presentable": true,
+        "system": false,
+        "type": "autodate"
+      },
+      {
+        "hidden": false,
+        "id": "autodate3332085495",
+        "name": "updated",
+        "onCreate": true,
+        "onUpdate": true,
+        "presentable": false,
+        "system": false,
+        "type": "autodate"
+      }
+    ],
+    "indexes": [
+      "CREATE INDEX `idx_feedback_user` ON `feedback` (`user`)",
+      "CREATE INDEX `idx_feedback_status` ON `feedback` (`status`)",
+      "CREATE INDEX `idx_feedback_type` ON `feedback` (`type`)"
+    ],
+    "system": false
   }
 ]

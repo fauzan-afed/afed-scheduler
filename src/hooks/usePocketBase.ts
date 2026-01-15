@@ -350,3 +350,43 @@ export function useMeetings(roomId: string, date: Date) {
 
     return { meetings, loading, createMeeting, deleteMeeting, reload: loadMeetings };
 }
+
+// Feedback Hook
+export function useFeedback() {
+    const submitFeedback = useCallback(async (data: {
+        type: 'issue' | 'idea' | 'question' | 'other';
+        category: 'bug' | 'feature' | 'ui' | 'performance' | 'other';
+        title: string;
+        description: string;
+        priority: 'low' | 'medium' | 'high' | 'urgent';
+        user?: CurrentUser;
+        email?: string;
+    }) => {
+        try {
+            const feedbackData: any = {
+                type: data.type,
+                category: data.category,
+                title: data.title,
+                description: data.description,
+                priority: data.priority,
+                status: 'open',
+            };
+
+            // Add user if logged in
+            if (data.user) {
+                feedbackData.user = data.user.id;
+            } else if (data.email) {
+                // Add email for anonymous users
+                feedbackData.email = data.email;
+            }
+
+            await pb.collection('feedback').create(feedbackData);
+
+            return { success: true };
+        } catch (error: any) {
+            return { success: false, error: error.message || 'Failed to submit feedback' };
+        }
+    }, []);
+
+    return { submitFeedback };
+}

@@ -9,9 +9,10 @@ import BookButton from '@/components/BookButton';
 import BookingModal from '@/components/BookingModal';
 import MeetingDetailModal from '@/components/MeetingDetailModal';
 import RegistrationModal from '@/components/RegistrationModal';
+import FeedbackModal, { FeedbackData } from '@/components/FeedbackModal';
 import { Meeting, Attendee } from '@/components/EventCard';
 import { AvatarFullConfig } from 'react-nice-avatar';
-import { useAuth, useMeetings, useUser, useRooms, CurrentUser } from '@/hooks/usePocketBase';
+import { useAuth, useMeetings, useUser, useRooms, useFeedback, CurrentUser } from '@/hooks/usePocketBase';
 
 interface SchedulerPageProps {
     roomId?: string;
@@ -57,9 +58,14 @@ export default function SchedulerPage({ roomId }: SchedulerPageProps) {
 
     // Find first room if no roomId specified
     const firstRoomId = Object.keys(rooms)[0] || '';
+
+    // Feedback hook
+    const { submitFeedback } = useFeedback();
+
     const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
     const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
     const [isRegistrationModalOpen, setIsRegistrationModalOpen] = useState(false);
+    const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
     const [isRegistering, setIsRegistering] = useState(false);
     const [isDeletingMeeting, setIsDeletingMeeting] = useState(false);
     const [selectedTime, setSelectedTime] = useState<Date | null>(null);
@@ -215,6 +221,13 @@ export default function SchedulerPage({ roomId }: SchedulerPageProps) {
         setIsRegistering(false);
     };
 
+    const handleFeedbackSubmit = async (feedback: FeedbackData) => {
+        return await submitFeedback({
+            ...feedback,
+            user: currentUser || undefined,
+        });
+    };
+
     // Filter meetings for current date
     const currentDateMeetings = meetings.filter(meeting => {
         const meetingDate = new Date(meeting.start);
@@ -240,6 +253,7 @@ export default function SchedulerPage({ roomId }: SchedulerPageProps) {
                 onPrev={handlePrevDay}
                 onNext={handleNextDay}
                 onDateChange={handleDateChange}
+                onFeedbackClick={() => setIsFeedbackModalOpen(true)}
             />
 
             <RoomCard
@@ -278,6 +292,13 @@ export default function SchedulerPage({ roomId }: SchedulerPageProps) {
                 meeting={selectedMeeting}
                 currentUser={currentUser}
                 onDelete={handleDeleteMeeting}
+            />
+
+            <FeedbackModal
+                isOpen={isFeedbackModalOpen}
+                onClose={() => setIsFeedbackModalOpen(false)}
+                onSubmit={handleFeedbackSubmit}
+                currentUser={currentUser}
             />
         </main>
     );
