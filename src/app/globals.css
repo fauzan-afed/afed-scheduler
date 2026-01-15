@@ -103,10 +103,50 @@ body {
   color: var(--gray-700);
 }
 
+.header-date-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
 .header-date {
   font-size: 17px;
   font-weight: 600;
   color: var(--gray-900);
+}
+
+.header-date-picker {
+  width: 140px;
+  padding: 6px 12px;
+  border: 1px solid var(--gray-200);
+  border-radius: 8px;
+  font-size: 13px;
+  font-family: inherit;
+  color: var(--gray-700);
+  background-color: var(--gray-50);
+  cursor: pointer;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.header-date-picker:hover {
+  border-color: var(--gray-300);
+}
+
+.header-date-picker:focus {
+  outline: none;
+  border-color: var(--primary-blue);
+  box-shadow: 0 0 0 3px rgba(72, 18, 103, 0.1);
+}
+
+.header-date-picker::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  opacity: 0.6;
+  transition: opacity 0.2s;
+}
+
+.header-date-picker::-webkit-calendar-picker-indicator:hover {
+  opacity: 1;
 }
 
 .header-btn-placeholder {

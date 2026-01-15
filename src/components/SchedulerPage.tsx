@@ -92,6 +92,13 @@ export default function SchedulerPage({ roomId }: SchedulerPageProps) {
         }
     };
 
+    const handleDateChange = (date: Date) => {
+        // Allow any date selection
+        const selectedDate = new Date(date);
+        selectedDate.setHours(0, 0, 0, 0);
+        setCurrentDate(selectedDate);
+    };
+
     const handleBookMeeting = () => {
         // Open modal without prefilling time
         setSelectedTime(null);
@@ -231,6 +238,7 @@ export default function SchedulerPage({ roomId }: SchedulerPageProps) {
                 canGoNext={canGoNext}
                 onPrev={handlePrevDay}
                 onNext={handleNextDay}
+                onDateChange={handleDateChange}
             />
 
             <RoomCard
