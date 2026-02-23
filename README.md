@@ -85,7 +85,7 @@ yarn dev
 pnpm dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) in your browser.
+Open [http://localhost:3001](http://localhost:3001) in your browser.
 
 ## 📁 Project Structure
 
@@ -323,7 +323,7 @@ RUN npm ci --only=production
 COPY . .
 RUN npm run build
 
-EXPOSE 3000
+EXPOSE 3001
 
 CMD ["npm", "start"]
 ```
@@ -331,7 +331,7 @@ CMD ["npm", "start"]
 Build and run:
 ```bash
 docker build -t afed-scheduler .
-docker run -p 3000:3000 -e NEXT_PUBLIC_POCKETBASE_URL=http://your-pb-url afed-scheduler
+docker run -p 3001:3001 -e NEXT_PUBLIC_POCKETBASE_URL=http://your-pb-url afed-scheduler
 ```
 
 ## 🤝 Contributing

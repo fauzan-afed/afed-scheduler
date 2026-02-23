@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback, useRef } from 'react';
-import pb, { PbUser, PbMeeting, PbMeetingExpanded, PbMeetingAttendee } from '@/lib/pocketbase';
+import pb, { PbUser, PbMeeting, PbMeetingExpanded, PbMeetingAttendee, withAutoRefresh } from '@/lib/pocketbase';
 import { AvatarFullConfig, genConfig } from 'react-nice-avatar';
 import { Meeting, Attendee } from '@/components/EventCard';
 
@@ -48,12 +48,30 @@ export function useAuth() {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        // Check if user is already logged in
-        const authData = pb.authStore.model as PbUser | null;
-        if (authData) {
-            setUser(pbUserToCurrentUser(authData));
-        }
-        setLoading(false);
+        const initAuth = async () => {
+            // Check if user is already logged in
+            const authData = pb.authStore.model as PbUser | null;
+
+            if (authData && pb.authStore.token) {
+                try {
+                    // Try to refresh the token to ensure it's still valid
+                    // This will fail if token is truly expired, clearing the auth store
+                    await pb.collection('users').authRefresh();
+                    setUser(pbUserToCurrentUser(pb.authStore.model as PbUser));
+                    console.log('[useAuth] Token refreshed successfully');
+                } catch (error) {
+                    console.log('[useAuth] Token expired or invalid, auth cleared');
+                    // Token is expired, authStore is already cleared by authRefresh failure
+                    setUser(null);
+                }
+            } else if (authData) {
+                // Has model but no token (shouldn't happen, but handle it)
+                setUser(pbUserToCurrentUser(authData));
+            }
+            setLoading(false);
+        };
+
+        initAuth();
 
         // Listen to auth changes
         const unsubscribe = pb.authStore.onChange(() => {
@@ -271,33 +289,36 @@ export function useMeetings(roomId: string, date: Date) {
         end: Date;
         user: CurrentUser;
     }) => {
+        const currentRoomId = roomIdRef.current;
+        if (!currentRoomId) {
+            return { success: false, error: 'No room selected' };
+        }
+
         try {
-            const currentRoomId = roomIdRef.current;
-            if (!currentRoomId) {
-                return { success: false, error: 'No room selected' };
-            }
+            // Use withAutoRefresh to automatically handle expired tokens
+            await withAutoRefresh(async () => {
+                // Create the meeting with the provided roomId
+                const meeting = await pb.collection('meetings').create({
+                    room: currentRoomId,
+                    owner: data.user.id,
+                    title: data.title,
+                    start: data.start.toISOString(),
+                    end: data.end.toISOString(),
+                    status: 'scheduled',
+                });
 
-            // Create the meeting with the provided roomId
-            const meeting = await pb.collection('meetings').create({
-                room: currentRoomId,
-                owner: data.user.id,
-                title: data.title,
-                start: data.start.toISOString(),
-                end: data.end.toISOString(),
-                status: 'scheduled',
+                // Add the creator as an attendee
+                await pb.collection('meeting_attendees').create({
+                    meeting: meeting.id,
+                    user: data.user.id,
+                    name: data.user.name,
+                    avatarConfig: data.user.avatarConfig,
+                    isExternal: false,
+                });
+
+                // Reload meetings
+                await loadMeetings();
             });
-
-            // Add the creator as an attendee
-            await pb.collection('meeting_attendees').create({
-                meeting: meeting.id,
-                user: data.user.id,
-                name: data.user.name,
-                avatarConfig: data.user.avatarConfig,
-                isExternal: false,
-            });
-
-            // Reload meetings
-            await loadMeetings();
 
             return { success: true };
         } catch (error: any) {
@@ -308,8 +329,10 @@ export function useMeetings(roomId: string, date: Date) {
     // Delete meeting
     const deleteMeeting = useCallback(async (meetingId: string) => {
         try {
-            await pb.collection('meetings').delete(meetingId);
-            setMeetings(prev => prev.filter(m => m.id !== meetingId));
+            await withAutoRefresh(async () => {
+                await pb.collection('meetings').delete(meetingId);
+                setMeetings(prev => prev.filter(m => m.id !== meetingId));
+            });
             return { success: true };
         } catch (error: any) {
             return { success: false, error: error.message || 'Failed to delete meeting' };
@@ -375,12 +398,19 @@ export function useFeedback() {
             // Add user if logged in
             if (data.user) {
                 feedbackData.user = data.user.id;
-            } else if (data.email) {
-                // Add email for anonymous users
-                feedbackData.email = data.email;
-            }
 
-            await pb.collection('feedback').create(feedbackData);
+                // Use withAutoRefresh when user is logged in
+                await withAutoRefresh(async () => {
+                    await pb.collection('feedback').create(feedbackData);
+                });
+            } else if (data.email) {
+                // Add email for anonymous users (no auth needed)
+                feedbackData.email = data.email;
+                await pb.collection('feedback').create(feedbackData);
+            } else {
+                // Anonymous submission without email
+                await pb.collection('feedback').create(feedbackData);
+            }
 
             return { success: true };
         } catch (error: any) {
